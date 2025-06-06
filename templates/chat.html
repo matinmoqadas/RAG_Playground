@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Gemini RAG Chat</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f7f7f8;
+            margin: 0;
+            padding: 0;
+        }
+        #chat-container {
+            width: 450px;
+            margin: 40px auto;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+            padding: 24px;
+        }
+        #messages {
+            height: 400px;
+            overflow-y: auto;
+            border: 1px solid #eee;
+            background: #fafafa;
+            padding: 12px;
+            border-radius: 5px;
+            margin-bottom: 16px;
+        }
+        .message {
+            margin: 10px 0;
+            padding: 8px 12px;
+            border-radius: 18px;
+            max-width: 75%;
+            display: inline-block;
+            clear: both;
+        }
+        .user {
+            background: #d2e3fc;
+            float: right;
+        }
+        .bot {
+            background: #ececec;
+            float: left;
+        }
+        #input-form {
+            display: flex;
+        }
+        #user-input {
+            flex: 1;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            margin-right: 10px;
+            font-size: 1em;
+        }
+        #send-btn {
+            background: #4285f4;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 18px;
+            font-size: 1em;
+            cursor: pointer;
+        }
+        #send-btn:disabled {
+            background: #b3d1fc;
+        }
+    </style>
+</head>
+<body>
+    <div id="chat-container">
+        <h2>Gemini RAG Chat</h2>
+        <div id="messages"></div>
+        <form id="input-form">
+            <input type="text" id="user-input" autocomplete="off" placeholder="Type your message..." required />
+            <button type="submit" id="send-btn">Send</button>
+        </form>
+    </div>
+    <script>
+        const messagesDiv = document.getElementById('messages');
+        const form = document.getElementById('input-form');
+        const userInput = document.getElementById('user-input');
+        const sendBtn = document.getElementById('send-btn');
+
+        function addMessage(text, sender) {
+            const msg = document.createElement('div');
+            msg.className = 'message ' + sender;
+            msg.textContent = text;
+            messagesDiv.appendChild(msg);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+
+        form.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const text = userInput.value.trim();
+            if (!text) return;
+            addMessage(text, 'user');
+            userInput.value = '';
+            sendBtn.disabled = true;
+
+            try {
+                const res = await fetch('/chat', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({message: text})
+                });
+                const data = await res.json();
+                addMessage(data.response, 'bot');
+            } catch (err) {
+                addMessage('Error communicating with server.', 'bot');
+            } finally {
+                sendBtn.disabled = false;
+                userInput.focus();
+            }
+        });
+    </script>
+</body>
+</html>
