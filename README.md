@@ -9,7 +9,7 @@ Briefly describe what your project does and its primary use cases.
 1. Clone the repository:
    ```sh
    git clone https://github.com/GeneWhisperer/RAG_Best_Practices.git
-   cd yourproject
+   cd RAG_Best_Practices
    ```
 
 2. Install dependencies:
