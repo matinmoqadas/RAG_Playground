@@ -4,8 +4,8 @@ from langchain.vectorstores import FAISS
 from rank_bm25 import BM25Okapi
 from typing import List, Tuple
 
-class RAG:
-    def __init__(self, documents: List[str], embedding_model=None):
+class GeminiRAG:
+    def __init__(self, documents: List[str], embedding_model=None, knoeledge_base=None):
         self.documents = documents
         # Use Gemini embedding model via LangChain (GoogleGenerativeAIEmbeddings)
         self.embedding_model = embedding_model or GoogleGenerativeAIEmbeddings(model="models/embedding-001")
@@ -13,6 +13,13 @@ class RAG:
         self.faiss_index = FAISS.from_texts(documents, self.embedding_model)
         # BM25 Index
         self.bm25 = BM25Okapi([doc.split() for doc in documents])
+          """
+        Initialize the GeminiRAG instance.
+
+        Args:
+            knowledge_base: Optional knowledge base object to perform RAG.
+        """
+        self.knowledge_base = knowledge_base
         
     def semantic_search(self, query: str, top_k: int = 5) -> List[Tuple[str, float]]:
         docs_and_scores = self.faiss_index.similarity_search_with_score(query, k=top_k)
@@ -52,3 +59,19 @@ class RAG:
     def hyde_hybrid_search(self, question: str, top_k: int = 5, alpha: float = 0.5, model=None) -> List[Tuple[str, float]]:
         hypothetical_answer = self.hyde(question, model=model)
         return self.hybrid_search(hypothetical_answer, top_k=top_k, alpha=alpha)
+
+    def chat(self, prompt: str) -> str:
+        """
+        Generate a response to the given prompt using RAG.
+
+        Args:
+            prompt (str): The user input prompt.
+
+        Returns:
+            str: The generated response.
+        """
+        # Example implementation (replace with actual logic)
+        if self.knowledge_base:
+            context = self.knowledge_base.retrieve(prompt)
+            return f"Context: {context}\nResponse: This is a generated answer."
+        return "Response: This is a generated answer."
