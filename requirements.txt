@@ -1,0 +1,6 @@
+numpy
+langchain
+langchain-google-genai
+google-generativeai
+faiss-cpu
+rank_bm25
