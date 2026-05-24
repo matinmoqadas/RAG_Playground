@@ -1,9 +1,8 @@
 from flask import Flask, render_template, request, jsonify
-from rag_gemini import GeminiRAG  # Assuming rag_gemini.py defines GeminiRAG class
+from rag_gemini import GeminiRAG  
 
 app = Flask(__name__)
 
-# Initialize GeminiRAG (adjust init as needed for your implementation)
 rag = GeminiRAG()
 
 @app.route('/')
