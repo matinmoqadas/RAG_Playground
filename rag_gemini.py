@@ -5,7 +5,7 @@ from rank_bm25 import BM25Okapi
 from typing import List, Tuple
 
 class GeminiRAG:
-    def __init__(self, documents: List[str], embedding_model=None, knoeledge_base=None):
+    def __init__(self, documents: List[str], embedding_model=None, knowledge_base=None):
         self.documents = documents
         # Use Gemini embedding model via LangChain (GoogleGenerativeAIEmbeddings)
         self.embedding_model = embedding_model or GoogleGenerativeAIEmbeddings(model="models/embedding-001")
