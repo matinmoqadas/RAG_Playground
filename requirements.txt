@@ -1,6 +1,10 @@
 numpy
 langchain
-langchain-google-genai
-google-generativeai
+langchain-openai 
+langchain-community
+langchain-tavily
 faiss-cpu
 rank_bm25
+tiktoken 
+pypdf
+tavily-python 
